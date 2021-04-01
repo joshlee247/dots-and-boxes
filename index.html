@@ -355,6 +355,8 @@
         </div>
         <script>
             var cpu = false;
+
+            //initializes audio files
             var btnClick = new sound("/audio/button.mp3");
             var point = new sound("/audio/+1.mp3");
             var backgroundMusic = new sound ("/audio/bg.mp3");
@@ -377,18 +379,26 @@
                 modal.style.display = "none";
                 cpu = false;
                 btnClick.play();
-            }
-             //end modal
+            } //end modal
             
+            //total possitble moves
             var moves = 71;
+
             var currentPlayer = "Red";
+
+            //scores
             var p1 = 0;
             var p2 = 0;
 
+            //flag to check if user just scored
             var prevScore = false;
 
+            //initializes array to keep track who goes where
             var board = new Array(71).fill("");
+            //tracks which color filled each square
             var squares = new Array(30).fill(false);
+
+            //all possible lines to form square
             const completeBox = [
                 [0, 6, 7, 13],
                 [1, 7, 8, 14],
@@ -426,15 +436,20 @@
                 [57, 63, 64, 70]
             ];
 
+            //displays initial player scores
             document.getElementById("p1").innerHTML = p1;
             document.getElementById("p2").innerHTML = p2;
 
+            //moves computer
             function moveCPU() {
                 let randLine;
+                //picks random line, checks if played
                 do {
                     randLine = Math.floor(Math.random() * 70);
                 }
                 while (board[randLine] != "");
+
+                //checks if horizontal line
                 if (
                     (randLine >= 0 && randLine < 6) || (randLine >= 13 && randLine < 19) || 
                     (randLine >= 26 && randLine < 32) || (randLine >= 39 && randLine < 45) || 
@@ -444,6 +459,7 @@
                         changeHLine(randLine);
                     }
                 }
+                //checks if vertical line
                 else if (
                     (randLine >= 6 && randLine < 13) || (randLine >= 19 && randLine < 26) || 
                     (randLine >= 32 && randLine < 39) || (randLine >= 45 && randLine < 52) || 
@@ -453,10 +469,12 @@
                         changeVLine(randLine);
                     }
                 }
+                //if CPU did not score, switch players
                 if (!prevScore) {
                     currentPlayer = "Red";
                 }
-            }
+            } //end function moveCPU()
+            //changes horizontal line color when played
             function changeHLine(id) {
                 btnClick.play();
                 var line = document.getElementById(id);
@@ -473,7 +491,8 @@
                     }
                     handleUserSquare();
                 }
-            }
+            } //end function changeHLine()
+            //changes vertical line color when played
             function changeVLine(id) {
                 btnClick.play();
                 var line = document.getElementById(id);
@@ -490,7 +509,8 @@
                     }
                     handleUserSquare();
                 }
-            }
+            } //end function changeVLine()
+            //switches players
             function handlePlayerChange() {
                     if (!prevScore) {
                         currentPlayer = currentPlayer === "Blue" ? "Red" : "Blue";
@@ -499,7 +519,8 @@
                         setTimeout(moveCPU, 300);
                     }
                     displayPlayerChange();
-            }
+            } //end function handlePlayerChange()
+            //displays turn
             function displayPlayerChange() {
                 if (currentPlayer == "Red" && cpu){
                     document.getElementById("status").innerHTML = "It's Your Turn";
@@ -513,7 +534,8 @@
                 else if (currentPlayer == "Blue" && !cpu){
                     document.getElementById("status").innerHTML = "It's Blue's Turn";
                 }
-            }
+            } //end function displayPlayerChange()
+            //checks to see if played line completed square
             function handleUserSquare() {
                 prevScore = false;
                 for (let i = 0; i <= 29; i++) {
@@ -527,6 +549,7 @@
                     }
                     if (a !== "" && b !== "" && c !== "" && d !== "" && !squares[i]) {
                         fillSquare(i);
+                        //handles when user fills in 2 boxes with 1 line
                         if (!squares[i+1] || !squares[i-1] || !squares[i-6] || !squares[i+6] && prevScore) {
                             for (let i = 0; i <= 29; i++) {
                                 const winCondition = completeBox[i];
@@ -542,6 +565,7 @@
                                 }
                             }
                         }
+                        //end game when all possible spots are filled
                         if (moves == 0) {
                             endGame();
                         }
@@ -549,7 +573,8 @@
                     }
                 }
                 handlePlayerChange();
-            }
+            } //end function handleUserSquare()
+            //fills square with respective color
             function fillSquare(i) {
                 if (currentPlayer === "Blue") {
                     //fill square blue
@@ -566,7 +591,8 @@
                 prevScore = true;
                 squares[i] = true;
                 displayScore();
-            }
+            } //end function fillSquare()
+            //displays score
             function displayScore() {
                 if (currentPlayer === "Blue") {
                     document.getElementById("p2").innerHTML = p2;
@@ -574,7 +600,8 @@
                 else if (currentPlayer === "Red") {
                     document.getElementById("p1").innerHTML = p1;
                 }
-            }
+            } //end function displayScore()
+            //ends game
             function endGame() {
                 if (p1 > p2) {
                     document.getElementById("status").innerHTML = "Game Over. Red Wins!";
@@ -586,7 +613,8 @@
                     document.getElementById("status").innerHTML = "Game Over. It's a tie!";
                 }
                 exit();
-            }
+            } //end function endGame()
+            //sound contructor
             function sound(src) {
                 this.sound = document.createElement("audio");
                 this.sound.src = src;
@@ -600,7 +628,7 @@
                 this.stop = function(){
                     this.sound.pause();
                 }
-            }
+            } //end function sound()
         </script>
     </body>
 </html>
