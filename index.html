@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://use.typekit.net/aax0ttd.css">
+        <style>
+            html {
+                background-color: rgb(226, 211, 181);
+                font-family: montserrat, sans-serif;
+                font-weight: 700;
+                font-style: normal;
+                color: #ffffff;
+            }
+            table {
+                margin-left: auto;
+                margin-right: auto;
+                background-color: rgb(199, 184, 152);
+                padding: 3rem;
+                border-radius: 30px;
+                border: 5px solid rgb(167, 155, 128);
+            }
+            .board {
+                text-align: center;
+            }
+            .player {
+                display: flex;
+            }
+            td {
+                padding: 0;
+                margin: 0;
+                border-radius: 20px;
+            }
+            tr {
+                padding: 0;
+                margin: 0;
+            }
+            h1 {
+                text-align: center;
+                font-size: 5rem;
+            }
+            h2 {
+                margin-top: 8rem;
+                text-align: center;
+                font-size: 3rem;
+            }
+            h4 {
+                color: rgb(0,0,0);
+                text-align: center;
+                margin-top: 3rem;
+            }
+            p {
+                font-family: grover, sans-serif;
+                font-weight: 700;
+                font-style: normal;
+                font-size: 2rem;
+                color: #ffffff;
+                -webkit-text-stroke-width: 2px;
+                -webkit-text-stroke-color: rgb(128, 108, 86);
+
+            }
+            img {
+                -moz-user-select: none; /* These user-select properties are inheritable, used to prevent text selection */
+                -webkit-user-select: none;
+                -ms-user-select: none; /* From IE10 only */
+                user-select: none; /* Not valid CSS yet, as of July 2012 */
+
+                -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+                user-drag: none;
+            }
+            .score {
+                margin: 0;
+                margin-left: 1rem;
+                padding: 0;
+            }
+            .scores {
+                text-align: center;
+                justify-content: space-between;
+                width: 800px;
+                display: flex;
+                margin-top: 2rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            /* The Modal (background) */
+            .modal {
+                display: block;
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content/Box */
+            .modal-content {
+                background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url("images/modal-bg.jpg");
+                background-repeat: no-repeat;
+                background-size: 100%;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 60%; /* Could be more or less, depending on screen size */
+                border-radius: 50px;
+                padding: 5rem 0 1rem 0;
+                box-shadow: 0px 10px 10px rgba(0,0,0,0.2); 
+                justify-content: center;
+            }
+
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            .player-buttons {
+                display: flex;
+                justify-content: center;
+            }
+            .btn {
+                margin: 0rem 1rem 1rem 1rem;
+                padding: 1rem 4rem 1rem 4rem;
+                border: 4px solid #05EAB3;
+                background-color: #01CE9B;
+                color: #ffffff;
+                border-radius: 50px;
+                font-family: montserrat, sans-serif;
+                font-weight: 700;
+                font-style: normal;
+                color: #ffffff;
+                font-size: 2rem;
+                outline: none;
+                box-shadow: 0px 10px 10px rgba(0,0,0,0.4); 
+                position: relative;
+                top: 0;
+                transition: top ease-in-out 0.3s;
+            }
+            .btn:hover {
+                top: -10px;
+            }
+            .logo {
+                margin-right: auto;
+                margin-left: auto;
+                width: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <center>
+                    <img class="logo" src="/images/logo.png">
+                </center>
+                <div class="player-buttons">
+                    <button id="1P" class="btn">1 Player</button>
+                    <button id="2P" class="btn">2 Players</button>
+                </div>
+                <h4 style="color: #fff;">by Josh Lee</p>
+            </div>
+        
+        </div>
+        <h2 id="status">Select a line to start</h2>
+        <div class="game">
+            <div class="board">
+                <table align="center">
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="0" src="./images/line.png" onclick="changeHLine('0')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="1" src="./images/line.png" onclick="changeHLine('1')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="2" src="./images/line.png" onclick="changeHLine('2')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="3" src="./images/line.png" onclick="changeHLine('3')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="4" src="./images/line.png" onclick="changeHLine('4')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="5" src="./images/line.png" onclick="changeHLine('5')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="6" src="./images/vline.png" onclick="changeVLine('6')"></td>
+                        <td id="s0"></td>
+                        <td><img id="7" src="./images/vline.png" onclick="changeVLine('7')"></td>
+                        <td id="s1"></td>
+                        <td><img id="8" src="./images/vline.png" onclick="changeVLine('8')"></td>
+                        <td id="s2"></td>
+                        <td><img id="9" src="./images/vline.png" onclick="changeVLine('9')"></td>
+                        <td id="s3"></td>
+                        <td><img id="10" src="./images/vline.png" onclick="changeVLine('10')"></td>
+                        <td id="s4"></td>
+                        <td><img id="11" src="./images/vline.png" onclick="changeVLine('11')"></td>
+                        <td id="s5"></td>
+                        <td><img id="12" src="./images/vline.png" onclick="changeVLine('12')"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="13" src="./images/line.png" onclick="changeHLine('13')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="14" src="./images/line.png" onclick="changeHLine('14')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="15" src="./images/line.png" onclick="changeHLine('15')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="16" src="./images/line.png" onclick="changeHLine('16')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="17" src="./images/line.png" onclick="changeHLine('17')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="18" src="./images/line.png" onclick="changeHLine('18')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="19" src="./images/vline.png" onclick="changeVLine('19')"></td>
+                        <td id="s6"></td>
+                        <td><img id="20" src="./images/vline.png" onclick="changeVLine('20')"></td>
+                        <td id="s7"></td>
+                        <td><img id="21" src="./images/vline.png" onclick="changeVLine('21')"></td>
+                        <td id="s8"></td>
+                        <td><img id="22" src="./images/vline.png" onclick="changeVLine('22')"></td>
+                        <td id="s9"></td>
+                        <td><img id="23" src="./images/vline.png" onclick="changeVLine('23')"></td>
+                        <td id="s10"></td>
+                        <td><img id="24" src="./images/vline.png" onclick="changeVLine('24')"></td>
+                        <td id="s11"></td>
+                        <td><img id="25" src="./images/vline.png" onclick="changeVLine('25')"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="26" src="./images/line.png" onclick="changeHLine('26')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="27" src="./images/line.png" onclick="changeHLine('27')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="28" src="./images/line.png" onclick="changeHLine('28')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="29" src="./images/line.png" onclick="changeHLine('29')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="30" src="./images/line.png" onclick="changeHLine('30')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="31" src="./images/line.png" onclick="changeHLine('31')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="32" src="./images/vline.png" onclick="changeVLine('32')"></td>
+                        <td id="s12"></td>
+                        <td><img id="33" src="./images/vline.png" onclick="changeVLine('33')"></td>
+                        <td id="s13"></td>
+                        <td><img id="34" src="./images/vline.png" onclick="changeVLine('34')"></td>
+                        <td id="s14"></td>
+                        <td><img id="35" src="./images/vline.png" onclick="changeVLine('35')"></td>
+                        <td id="s15"></td>
+                        <td><img id="36" src="./images/vline.png" onclick="changeVLine('36')"></td>
+                        <td id="s16"></td>
+                        <td><img id="37" src="./images/vline.png" onclick="changeVLine('37')"></td>
+                        <td id="s17"></td>
+                        <td><img id="38" src="./images/vline.png" onclick="changeVLine('38')"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="39" src="./images/line.png" onclick="changeHLine('39')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="40" src="./images/line.png" onclick="changeHLine('40')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="41" src="./images/line.png" onclick="changeHLine('41')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="42" src="./images/line.png" onclick="changeHLine('42')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="43" src="./images/line.png" onclick="changeHLine('43')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="44" src="./images/line.png" onclick="changeHLine('44')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="45" src="./images/vline.png" onclick="changeVLine('45')"></td>
+                        <td id="s18"></td>
+                        <td><img id="46" src="./images/vline.png" onclick="changeVLine('46')"></td>
+                        <td id="s19"></td>
+                        <td><img id="47" src="./images/vline.png" onclick="changeVLine('47')"></td>
+                        <td id="s20"></td>
+                        <td><img id="48" src="./images/vline.png" onclick="changeVLine('48')"></td>
+                        <td id="s21"></td>
+                        <td><img id="49" src="./images/vline.png" onclick="changeVLine('49')"></td>
+                        <td id="s22"></td>
+                        <td><img id="50" src="./images/vline.png" onclick="changeVLine('50')"></td>
+                        <td id="s23"></td>
+                        <td><img id="51" src="./images/vline.png" onclick="changeVLine('51')"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="52" src="./images/line.png" onclick="changeHLine('52')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="53" src="./images/line.png" onclick="changeHLine('53')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="54" src="./images/line.png" onclick="changeHLine('54')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="55" src="./images/line.png" onclick="changeHLine('55')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="56" src="./images/line.png" onclick="changeHLine('56')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="57" src="./images/line.png" onclick="changeHLine('57')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="58" src="./images/vline.png" onclick="changeVLine('58')"></td>
+                        <td id="s24"></td>
+                        <td><img id="59" src="./images/vline.png" onclick="changeVLine('59')"></td>
+                        <td id="s25"></td>
+                        <td><img id="60" src="./images/vline.png" onclick="changeVLine('60')"></td>
+                        <td id="s26"></td>
+                        <td><img id="61" src="./images/vline.png" onclick="changeVLine('61')"></td>
+                        <td id="s27"></td>
+                        <td><img id="62" src="./images/vline.png" onclick="changeVLine('62')"></td>
+                        <td id="s28"></td>
+                        <td><img id="63" src="./images/vline.png" onclick="changeVLine('63')"></td>
+                        <td id="s29"></td>
+                        <td><img id="64" src="./images/vline.png" onclick="changeVLine('64')"></td>
+                    </tr>
+                    <tr>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="65" src="./images/line.png" onclick="changeHLine('65')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="66" src="./images/line.png" onclick="changeHLine('66')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="67" src="./images/line.png" onclick="changeHLine('67')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="68" src="./images/line.png" onclick="changeHLine('68')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="69" src="./images/line.png" onclick="changeHLine('69')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                        <td><img id="70" src="./images/line.png" onclick="changeHLine('70')"></td>
+                        <td><img id="dot" src="./images/dot.png"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="scores">
+                <div class="player">
+                    <img src="/images/p1.png">
+                    <p class="score" id="p1"></p>
+                </div>
+                <div class="player">
+                    <img src="/images/p2.png">
+                    <p class="score" id="p2"></p>
+                </div>
+            </div>
+        </div>
+        <script>
+            var cpu = false;
+            var btnClick = new sound("/audio/button.mp3");
+            var point = new sound("/audio/+1.mp3");
+            var backgroundMusic = new sound ("/audio/bg.mp3");
+
+            backgroundMusic.loop = true;
+
+            //modal
+            var modal = document.getElementById("myModal");
+            var onePlayer = document.getElementById("1P");
+            var twoPlayer = document.getElementById("2P");
+            
+            onePlayer.onclick = function() {
+                backgroundMusic.play();
+                modal.style.display = "none";
+                cpu = true;
+                btnClick.play();
+            }
+            twoPlayer.onclick = function() {
+                backgroundMusic.play();
+                modal.style.display = "none";
+                cpu = false;
+                btnClick.play();
+            }
+             //end modal
+            
+            var moves = 71;
+            var currentPlayer = "Red";
+            var p1 = 0;
+            var p2 = 0;
+
+            var prevScore = false;
+
+            var board = new Array(71).fill("");
+            var squares = new Array(30).fill(false);
+            const completeBox = [
+                [0, 6, 7, 13],
+                [1, 7, 8, 14],
+                [2, 8, 9, 15],
+                [3, 9, 10, 16],
+                [4, 10, 11, 17],
+                [5, 11, 12, 18],
+
+                [13, 19, 20, 26],
+                [14, 20, 21, 27],
+                [15, 21, 22, 28],        
+                [16, 22, 23, 29],
+                [17, 23, 24, 30],
+                [18, 24, 25, 31],
+
+                [26, 32, 33, 39],
+                [27, 33, 34, 40],
+                [28, 34, 35, 41],        
+                [29, 35, 36, 42],
+                [30, 36, 37, 43],
+                [31, 37, 38, 44],
+                
+                [39, 45, 46, 52],
+                [40, 46, 47, 53],
+                [41, 47, 48, 54],        
+                [42, 48, 49, 55],
+                [43, 49, 50, 56],
+                [44, 50, 51, 57],   
+
+                [52, 58, 59, 65],
+                [53, 59, 60, 66],
+                [54, 60, 61, 67],        
+                [55, 61, 62, 68],
+                [56, 62, 63, 69],
+                [57, 63, 64, 70]
+            ];
+
+            document.getElementById("p1").innerHTML = p1;
+            document.getElementById("p2").innerHTML = p2;
+
+            function moveCPU() {
+                let randLine;
+                do {
+                    randLine = Math.floor(Math.random() * 70);
+                }
+                while (board[randLine] != "");
+                if (
+                    (randLine >= 0 && randLine < 6) || (randLine >= 13 && randLine < 19) || 
+                    (randLine >= 26 && randLine < 32) || (randLine >= 39 && randLine < 45) || 
+                    (randLine >= 52 && randLine < 58) || (randLine >= 65 && randLine < 71)
+                ) {
+                    if (board[randLine] == "") {
+                        changeHLine(randLine);
+                    }
+                }
+                else if (
+                    (randLine >= 6 && randLine < 13) || (randLine >= 19 && randLine < 26) || 
+                    (randLine >= 32 && randLine < 39) || (randLine >= 45 && randLine < 52) || 
+                    (randLine >= 58 && randLine < 64)
+                ) {
+                    if (board[randLine] == "") {
+                        changeVLine(randLine);
+                    }
+                }
+                if (!prevScore) {
+                    currentPlayer = "Red";
+                }
+            }
+            function changeHLine(id) {
+                btnClick.play();
+                var line = document.getElementById(id);
+                if (line.src.indexOf("images/line.png") > -1 ) {
+                    if (currentPlayer === "Blue") {
+                        line.src = "./images/blueHLine.png";
+                        board[parseInt(id)] = "Blue";
+                        moves--;
+                    }
+                    else if (currentPlayer === "Red") {
+                        line.src = "./images/redHLine.png";
+                        board[parseInt(id)] = "Red";
+                        moves--;
+                    }
+                    handleUserSquare();
+                }
+            }
+            function changeVLine(id) {
+                btnClick.play();
+                var line = document.getElementById(id);
+                if (line.src.indexOf("images/vline.png") > -1 ) {
+                    if (currentPlayer === "Blue") {
+                        line.src = "./images/blueVLine.png";
+                        board[parseInt(id)] = "Blue";
+                        moves--;
+                    }
+                    else if (currentPlayer === "Red") {
+                        line.src = "./images/redVLine.png";
+                        board[parseInt(id)] = "Red";
+                        moves--;
+                    }
+                    handleUserSquare();
+                }
+            }
+            function handlePlayerChange() {
+                    if (!prevScore) {
+                        currentPlayer = currentPlayer === "Blue" ? "Red" : "Blue";
+                    }
+                    if (currentPlayer == "Blue" && cpu) {
+                        setTimeout(moveCPU, 300);
+                    }
+                    displayPlayerChange();
+            }
+            function displayPlayerChange() {
+                if (currentPlayer == "Red" && cpu){
+                    document.getElementById("status").innerHTML = "It's Your Turn";
+                }
+                else if (currentPlayer == "Red" && !cpu){
+                    document.getElementById("status").innerHTML = "It's Red's Turn";
+                }
+                else if (currentPlayer == "Blue" && cpu) {
+                    document.getElementById("status").innerHTML = "One second...";
+                }
+                else if (currentPlayer == "Blue" && !cpu){
+                    document.getElementById("status").innerHTML = "It's Blue's Turn";
+                }
+            }
+            function handleUserSquare() {
+                prevScore = false;
+                for (let i = 0; i <= 29; i++) {
+                    const winCondition = completeBox[i];
+                    let a = board[winCondition[0]];
+                    let b = board[winCondition[1]];
+                    let c = board[winCondition[2]];
+                    let d = board[winCondition[3]];
+                    if (a === '' || b === '' || c === '' || d === '') {
+                        continue;
+                    }
+                    if (a !== "" && b !== "" && c !== "" && d !== "" && !squares[i]) {
+                        fillSquare(i);
+                        if (!squares[i+1] || !squares[i-1] || !squares[i-6] || !squares[i+6] && prevScore) {
+                            for (let i = 0; i <= 29; i++) {
+                                const winCondition = completeBox[i];
+                                let a = board[winCondition[0]];
+                                let b = board[winCondition[1]];
+                                let c = board[winCondition[2]];
+                                let d = board[winCondition[3]];
+                                if (a === '' || b === '' || c === '' || d === '') {
+                                    continue;
+                                }
+                                if (a !== "" && b !== "" && c !== "" && d !== "" && !squares[i]) {
+                                    fillSquare(i);
+                                }
+                            }
+                        }
+                        if (moves == 0) {
+                            endGame();
+                        }
+                        break;
+                    }
+                }
+                handlePlayerChange();
+            }
+            function fillSquare(i) {
+                if (currentPlayer === "Blue") {
+                    //fill square blue
+                    document.getElementById('s' + i).style.backgroundColor = "#34C1D3";
+                    point.play();
+                    p2++;        
+                }
+                else if (currentPlayer === "Red") {
+                    //fill square red
+                    document.getElementById('s' + i).style.backgroundColor = "#EF4963";
+                    point.play();
+                    p1++;
+                }
+                prevScore = true;
+                squares[i] = true;
+                displayScore();
+            }
+            function displayScore() {
+                if (currentPlayer === "Blue") {
+                    document.getElementById("p2").innerHTML = p2;
+                }
+                else if (currentPlayer === "Red") {
+                    document.getElementById("p1").innerHTML = p1;
+                }
+            }
+            function endGame() {
+                if (p1 > p2) {
+                    document.getElementById("status").innerHTML = "Game Over. Red Wins!";
+                }
+                else if (p1 < p2) {
+                    document.getElementById("status").innerHTML = "Game Over. Blue Wins!";
+                }
+                else {
+                    document.getElementById("status").innerHTML = "Game Over. It's a tie!";
+                }
+                exit();
+            }
+            function sound(src) {
+                this.sound = document.createElement("audio");
+                this.sound.src = src;
+                this.sound.setAttribute("preload", "auto");
+                this.sound.setAttribute("controls", "none");
+                this.sound.style.display = "none";
+                document.body.appendChild(this.sound);
+                this.play = function(){
+                    this.sound.play();
+                }
+                this.stop = function(){
+                    this.sound.pause();
+                }
+            }
+        </script>
+    </body>
+</html>
